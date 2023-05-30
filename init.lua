@@ -394,6 +394,17 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
+  function FormatFunction()
+    vim.lsp.buf.format({
+      async = true,
+      range = {
+        ["start"] = vim.api.nvim_buf_get_mark(0, "<"),
+        ["end"] = vim.api.nvim_buf_get_mark(0, ">"),
+      }
+    })
+  end
+  vim.api.nvim_set_keymap("v", "\\f", "<Esc><cmd>lua FormatFunction()<CR>", {noremap = true})
+
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
